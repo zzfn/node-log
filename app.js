@@ -1,0 +1,21 @@
+const Koa = require('koa');
+const fs = require("fs/promises")
+const path = require("path")
+const es = require('./es')
+
+const app = new Koa();
+
+app.use(async ctx => {
+    if (ctx.request.url.startsWith("/log.gif")) {
+        await es(ctx.request.query)
+        const paths = path.join(__dirname, "./log.gif")
+        const file = await fs.readFile(paths);
+        ctx.response.set("content-type", "image/gif");
+        ctx.res.write(file, 'binary')
+        ctx.res.end()
+    } else {
+        ctx.body = 'Hello World';
+    }
+});
+
+app.listen(9000);
