@@ -1,7 +1,11 @@
 const {Client} = require('@elastic/elasticsearch')
 
 let client = new Client({
-    node: process.env.HOST
+    node: process.env.HOST,
+    auth: {
+        username: process.env.USERNAME,
+        password: process.env.PASSWORD
+    }
 })
 
 async function run(query) {
