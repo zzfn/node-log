@@ -11,10 +11,11 @@ app.use(async ctx => {
         const paths = path.join(__dirname, "./log.gif")
         const file = await fs.readFile(paths);
         ctx.response.set("content-type", "image/gif");
+        ctx.response.status=200,
         ctx.res.write(file, 'binary')
         ctx.res.end()
     } else {
-        ctx.body = 'Hello World';
+        ctx.response.body = 'Hello World';
     }
 });
 

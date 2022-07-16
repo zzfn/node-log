@@ -6,6 +6,7 @@ let client = new Client({
 
 async function run(query) {
     let {body, index} = query
+    if (!body || !index) return
     body = JSON.parse(Buffer.from(body, 'base64').toString('ascii'))
     await client.index({
         index,
