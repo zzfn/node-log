@@ -6,7 +6,7 @@ const es = require('./es')
 const app = new Koa();
 
 app.use(async ctx => {
-    if (ctx.request.url.startsWith("/log.gif")) {
+    if (ctx.request.url.startsWith("/zzf.gif")) {
         await es(ctx.request.query)
         const paths = path.join(__dirname, "./zzf.gif")
         const file = await fs.readFile(paths);
