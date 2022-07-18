@@ -9,12 +9,12 @@ let client = new Client({
 })
 
 async function run(query) {
-    let {body, index} = query
+    let {body, index, ip} = query
     if (!body || !index) return
     body = JSON.parse(Buffer.from(body, 'base64').toString('ascii'))
     await client.index({
         index,
-        body
+        body: {...body, ip, time: new Date()}
     })
 }
 
