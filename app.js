@@ -7,7 +7,7 @@ const app = new Koa();
 
 app.use(async ctx => {
     if (ctx.request.url.startsWith("/zzf.gif")) {
-        await es({...ctx.request.query, ip: ctx.request.ip})
+        await es({...ctx.request.query, ip: ctx.headers['x-forwarded-for'] || ctx.request.ip})
         const paths = path.join(__dirname, "./zzf.gif")
         const file = await fs.readFile(paths);
         ctx.response.set("content-type", "image/gif");
