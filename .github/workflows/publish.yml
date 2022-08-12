@@ -1,4 +1,4 @@
-name: publish doc
+name: publish node-log
 
 on:
   push:
@@ -35,6 +35,11 @@ jobs:
 
       - run: pnpm add -g @serverless-devs/s
 
+
       - run: s config add --AccessKeyID ${{secrets.AccessKeyID}} --AccessKeySecret ${{secrets.AccessKeySecret}} -a default -f
 
       - run: s deploy -y --use-local
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}

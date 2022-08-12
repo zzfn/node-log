@@ -17,11 +17,14 @@ services:
         name: log
         description: "Serverless Devs Website Docusaurus Function"
         runtime: custom
+        layers:
+          - d43502fd5a5e92d21cb5125ec1533ad7#nodejs16_fc_auto_created#1
         environmentVariables:
+          NODE_PATH: /opt/nodejs/node_modules
           PATH: /opt/node-v16.14.2-linux-x64/bin::/usr/local/bin/apache-maven/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/ruby/bin:/opt/bin
-          HOST: ${env(secrets.HOST)}
-          USERNAME: ${env(secrets.USERNAME)}
-          PASSWORD: ${env(secrets.PASSWORD)}
+          HOST: ${env(HOST)}
+          USERNAME: ${env(USERNAME)}
+          PASSWORD: ${env(PASSWORD)}
         codeUri: ./
         timeout: 30
         memorySize: 512
@@ -38,9 +41,6 @@ services:
             authType: anonymous
             methods:
               - GET
-              - POST
-              - PUT
-              - DELETE
       customDomains:
         - domainName: auto
           protocol: HTTP
