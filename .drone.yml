@@ -37,10 +37,11 @@ steps:
       target: /root/node-log
       source:
         - app.js
-        - index.js
+        - es.js
         - config.js
         - package.json
         - pnpm-lock.yaml
+        - zzf.gif
   - name: ssh
     image: appleboy/drone-ssh
     depends_on:
