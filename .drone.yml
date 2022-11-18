@@ -1,0 +1,65 @@
+kind: pipeline
+type: docker
+name: ci/cd
+volumes:
+  - name: node_modules
+    host:
+      path: /root/node-log/node_modules
+  - name: ssh_keys
+    host:
+      path: /root/.ssh
+clone:
+  disable: true
+steps:
+  - name: clone
+    image: alpine/git
+    volumes:
+      - name: ssh_keys
+        path: /root/.ssh
+    commands:
+      - git init
+      - git remote add origin $DRONE_GIT_SSH_URL
+      - git fetch --no-tags --prune --progress --no-recurse-submodules --depth=1
+      - git checkout origin/$DRONE_COMMIT_BRANCH -ft
+  - name: deploy
+    image: appleboy/drone-scp
+    depends_on:
+      - clone
+    settings:
+      host:
+        from_secret: server_host
+      port: 22
+      username:
+        from_secret: username
+      password:
+        from_secret: server_password
+      overwrite: true
+      target: /root/node-log
+      source:
+        - app.js
+        - index.js
+        - config.js
+        - package.json
+        - pnpm-lock.yaml
+  - name: ssh
+    image: appleboy/drone-ssh
+    depends_on:
+      - deploy
+    settings:
+      host:
+        from_secret: server_host
+      username:
+        from_secret: username
+      password:
+        from_secret: server_password
+      port: 22
+      command_timeout: 2m
+      script:
+        - cd /root/node-log
+        - pnpm i --frozen-lockfile --prod
+        - pm2 del log
+        - pm2 start npm --name log -i max -- run start
+trigger:
+  event:
+    exclude:
+      - promote
