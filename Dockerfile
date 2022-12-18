@@ -8,4 +8,4 @@ COPY . ./
 
 EXPOSE 3000
 
-CMD [ "node","-r", "dotenv/config app.js" ]
+CMD [ "node","-r", "dotenv/config","app.js" ]
