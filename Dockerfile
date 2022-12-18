@@ -6,6 +6,6 @@ RUN pnpm i --frozen-lockfile
 
 COPY . ./
 
-EXPOSE 3000
+EXPOSE 9000
 
 CMD [ "node","-r", "dotenv/config","app.js" ]
