@@ -6,6 +6,6 @@ RUN pnpm i --frozen-lockfile
 
 COPY . ./
 
-EXPOSE 9000
+EXPOSE 3000
 
-CMD [ "node", "gateway.js" ]
+CMD [ "node","-r", "dotenv/config app.js" ]
