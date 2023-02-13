@@ -30,28 +30,7 @@ steps:
       password:
         from_secret: nexus_docker_password
       repo: hub.oocc.es/home/node-log
-      tags: latest
-#  - name: deploy
-#    image: appleboy/drone-scp
-#    depends_on:
-#      - clone
-#    settings:
-#      host:
-#        from_secret: server_host
-#      port: 22
-#      username:
-#        from_secret: username
-#      password:
-#        from_secret: server_password
-#      overwrite: true
-#      target: /root/node-log
-#      source:
-#        - app.js
-#        - es.js
-#        - config.js
-#        - package.json
-#        - pnpm-lock.yaml
-#        - zzf.gif
+      tags: ${DRONE_COMMIT=latest}${DRONE_BUILD_NUMBER}
   - name: ssh
     image: appleboy/drone-ssh
     settings:
@@ -64,8 +43,9 @@ steps:
       port: 22
       command_timeout: 2m
       script:
-        - kubectl scale --replicas=0 -f https://git.oocc.es/oocc/k3s/raw/branch/master/node-log.yaml
+        - echo ${DRONE_COMMIT}${DRONE_BUILD_NUMBER}
         - kubectl apply -f https://git.oocc.es/oocc/k3s/raw/branch/master/node-log.yaml
+        - kubectl set image deployment/blog blog=hub.oocc.es/home/node-log:${DRONE_COMMIT}${DRONE_BUILD_NUMBER}
 trigger:
   event:
     exclude:
